@@ -1,0 +1,9 @@
+{
+    "name": "dev",
+    "dockerComposeFile": "docker-compose.localdev.yml",
+    "service": "dev",
+    "workspaceFolder": "/workspace",
+    "forwardPorts": [
+        3000
+    ]
+}
