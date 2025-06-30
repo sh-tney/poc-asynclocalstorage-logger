@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import ContextLogger from "../ContextLogger";
+import logger from "../utils/ContextLogger";
 
 /**
  * Error catcher middleware for handling uncaught errors in Express.
@@ -15,8 +15,6 @@ export default function errorCatcher(
 	res: Response,
 	_next: NextFunction,
 ): void {
-	const logger = ContextLogger.getInstance();
-
 	logger.error(`Uncaught Error at errorCatcherMiddleware: ${err.message}`, {
 		error: err,
 		stack: err.stack,

@@ -1,10 +1,10 @@
 import type { Express, Request, Response } from "express";
 import express from "express";
-import ContextLogger from "./ContextLogger";
 import anotherMiddleware from "./middleware/anotherMiddleware";
 import errorCatcher from "./middleware/errorCatcher";
 import loggerAttacher from "./middleware/loggerAttacher";
 import someFunction from "./SomeFunction";
+import logger from "./utils/ContextLogger";
 
 const app: Express = express();
 let globalRequestCounter = 0;
@@ -13,8 +13,6 @@ app.use(loggerAttacher);
 app.use(anotherMiddleware);
 
 app.get("/", async (req: Request, res: Response) => {
-	const logger = ContextLogger.getInstance();
-
 	// Have a global request counter to track the number of requests
 	globalRequestCounter++;
 	logger.upsertGlobalContext({ globalRequestCounter });

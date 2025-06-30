@@ -1,9 +1,6 @@
 import { randomInt } from "node:crypto";
 import type { Request, Response } from "express";
-import ContextLogger from "./ContextLogger";
-
-// Because the logger is a singleton, we can get the instance directly
-const logger = ContextLogger.getInstance();
+import logger from "./utils/ContextLogger";
 
 export default async function someFunction(
 	_req: Request,

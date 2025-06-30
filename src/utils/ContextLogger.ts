@@ -21,12 +21,14 @@ const LOG_OUTPUTS: Record<
 /**
  * ContextLogger provides context-aware structured logging, supporting both global and async-local context.
  */
-export default class ContextLogger {
+export class ContextLogger {
 	private static instance: ContextLogger;
 
 	private globalContext: LogAttributes = {};
 	private asyncContext: AsyncLocalStorage<LogAttributes> =
 		new AsyncLocalStorage();
+
+	private constructor() {}
 
 	/**
 	 * Returns the singleton instance of ContextLogger, ensuring a shared global context.
@@ -145,3 +147,6 @@ export default class ContextLogger {
 		});
 	}
 }
+
+const logger = ContextLogger.getInstance();
+export default logger;

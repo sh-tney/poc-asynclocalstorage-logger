@@ -1,6 +1,6 @@
 import { randomInt } from "node:crypto";
 import type { NextFunction, Request, Response } from "express";
-import ContextLogger from "../ContextLogger";
+import logger from "../utils/ContextLogger";
 
 /**
  * Middleware to assign a random integer to the logger's async context.
@@ -15,7 +15,6 @@ export default function anotherMiddleware(
 	_res: Response,
 	next: NextFunction,
 ): void {
-	const logger = ContextLogger.getInstance();
 	logger.upsertAsyncContext({ assignedFromAnotherMiddleware: randomInt(1000) });
 
 	logger.debug("Assigned a field from another middleware");
