@@ -1,10 +1,15 @@
 import type { Express, Request, Response } from "express";
 import express from "express";
+import { ContextLogger } from "./ContextLogger";
+import attachLogger from "./middleware/attachLogger";
 
 const app: Express = express();
 
+app.use(attachLogger);
+
 app.get("/", (req: Request, _res: Response) => {
-	console.log("Got req", req.ip);
+	const logger = ContextLogger.getInstance();
+	logger.info(`here`);
 });
 
 app.listen(3000, () => {

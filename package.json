@@ -12,6 +12,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.0.6",
 		"@types/express": "^5.0.3",
+		"@types/node": "^18.19.113",
 		"typescript": "^5.8.3"
 	},
 	"homepage": "https://github.com/sh-tney/poc-asynclocalstorage-logger#readme",
