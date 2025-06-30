@@ -1,0 +1,25 @@
+{
+  "name": "poc-asynclocalstorage-logger",
+  "version": "1.0.0",
+  "description": "Small demo of a logger based on the AsyncLocalStorage feature of node",
+  "main": "index.js",
+  "scripts": {
+    "": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sh-tney/poc-asynclocalstorage-logger.git"
+  },
+  "author": "sh-tney",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sh-tney/poc-asynclocalstorage-logger/issues"
+  },
+  "homepage": "https://github.com/sh-tney/poc-asynclocalstorage-logger#readme",
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

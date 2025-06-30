@@ -1,2 +1,2 @@
 # poc-asynclocalstorage-logger
-Proof of Concept repo, for testing a logger implementation using Node's AsyncLocalStorage
+Proof of Concept for a logger implementation using AsyncLocalStorage on Node18
