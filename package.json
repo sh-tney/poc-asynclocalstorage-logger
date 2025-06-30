@@ -1,25 +1,27 @@
 {
-  "name": "poc-asynclocalstorage-logger",
-  "version": "1.0.0",
-  "description": "Small demo of a logger based on the AsyncLocalStorage feature of node",
-  "main": "index.js",
-  "scripts": {
-    "": "start"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sh-tney/poc-asynclocalstorage-logger.git"
-  },
-  "author": "sh-tney",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/sh-tney/poc-asynclocalstorage-logger/issues"
-  },
-  "homepage": "https://github.com/sh-tney/poc-asynclocalstorage-logger#readme",
-  "devDependencies": {
-    "typescript": "^5.8.3"
-  },
-  "dependencies": {
-    "express": "^5.1.0"
-  }
+	"name": "poc-asynclocalstorage-logger",
+	"description": "Small demo of a logger based on the AsyncLocalStorage feature of node",
+	"version": "1.0.0",
+	"author": "sh-tney",
+	"bugs": {
+		"url": "https://github.com/sh-tney/poc-asynclocalstorage-logger/issues"
+	},
+	"dependencies": {
+		"express": "^5.1.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.0.6",
+		"@types/express": "^5.0.3",
+		"typescript": "^5.8.3"
+	},
+	"homepage": "https://github.com/sh-tney/poc-asynclocalstorage-logger#readme",
+	"license": "MIT",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sh-tney/poc-asynclocalstorage-logger.git"
+	},
+	"scripts": {
+		"start": "tsc; node ./dist/index.js"
+	}
 }

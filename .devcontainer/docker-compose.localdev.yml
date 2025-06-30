@@ -1,0 +1,10 @@
+services:
+  dev:
+    build:
+      context: ../
+      dockerfile: .devcontainer/localdev.Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ../:/workspace
+    ports:
+      - "3000:3000"
