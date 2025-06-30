@@ -7,16 +7,13 @@ export type LogAttributes = {
 	traceId?: string;
 } & { [key: string]: unknown };
 
-type LogLevel = "DEBUG" | "INFO" | "WARN" | "ERROR";
-const LOG_OUTPUTS: Record<
-	LogLevel,
-	(message?: unknown, ...optionalParams: unknown[]) => void
-> = {
+const LOG_OUTPUTS = {	
 	DEBUG: console.debug,
 	INFO: console.info,
 	WARN: console.warn,
 	ERROR: console.error,
-};
+} as const;
+type LogLevel = keyof typeof LOG_OUTPUTS;
 
 /**
  * ContextLogger provides context-aware structured logging, supporting both global and async-local context.
@@ -28,6 +25,9 @@ export class ContextLogger {
 	private asyncContext: AsyncLocalStorage<LogAttributes> =
 		new AsyncLocalStorage();
 
+	/**
+	 * Constructor is private to enforce singleton pattern.
+	 */
 	private constructor() {}
 
 	/**
