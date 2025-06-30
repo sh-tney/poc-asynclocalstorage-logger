@@ -21,7 +21,7 @@ const LOG_OUTPUTS: Record<
 /**
  * ContextLogger provides context-aware structured logging, supporting both global and async-local context.
  */
-export class ContextLogger {
+export default class ContextLogger {
 	private static instance: ContextLogger;
 
 	private globalContext: LogAttributes = {};

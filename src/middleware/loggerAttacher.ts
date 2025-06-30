@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { NextFunction, Request, Response } from "express";
-import { ContextLogger, type LogAttributes } from "../ContextLogger";
+import type { LogAttributes } from "../ContextLogger";
+import ContextLogger from "../ContextLogger";
 
 /**
  * Middleware to attach a logger to the request context.
@@ -10,7 +11,7 @@ import { ContextLogger, type LogAttributes } from "../ContextLogger";
  * @param _res - The Express response object (not used).
  * @param next - The next middleware function in the stack.
  */
-export default function attachLogger(
+export default function loggerAttacher(
 	req: Request,
 	_res: Response,
 	next: NextFunction,

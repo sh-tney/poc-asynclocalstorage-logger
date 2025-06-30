@@ -1,29 +1,28 @@
 import type { Express, Request, Response } from "express";
 import express from "express";
-import { ContextLogger } from "./ContextLogger";
-import attachLogger from "./middleware/attachLogger";
+import ContextLogger from "./ContextLogger";
+import anotherMiddleware from "./middleware/anotherMiddleware";
 import errorCatcher from "./middleware/errorCatcher";
+import loggerAttacher from "./middleware/loggerAttacher";
+import someFunction from "./SomeFunction";
 
 const app: Express = express();
 let globalRequestCounter = 0;
 
-app.use(attachLogger);
+app.use(loggerAttacher);
+app.use(anotherMiddleware);
 
-app.get("/", async (_req: Request, _res: Response) => {
+app.get("/", async (req: Request, res: Response) => {
 	const logger = ContextLogger.getInstance();
+
+	// Have a global request counter to track the number of requests
 	globalRequestCounter++;
 	logger.upsertGlobalContext({ globalRequestCounter });
 	logger.upsertAsyncContext({ requestNumber: globalRequestCounter });
 
 	logger.info(`Received request number: ${globalRequestCounter}`);
 
-	await new Promise((resolve) => setTimeout(resolve, 5000));
-
-	logger.info("This message is logged after 5 seconds");
-
-	throw new Error(
-		"This is a test error, which will be thrown to an error middleware",
-	); // This will trigger the error catcher middleware
+	return someFunction(req, res);
 });
 
 app.use(errorCatcher);
