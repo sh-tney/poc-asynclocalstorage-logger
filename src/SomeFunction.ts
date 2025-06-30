@@ -2,12 +2,13 @@ import { randomInt } from "node:crypto";
 import type { Request, Response } from "express";
 import ContextLogger from "./ContextLogger";
 
+// Because the logger is a singleton, we can get the instance directly
+const logger = ContextLogger.getInstance();
+
 export default async function someFunction(
 	_req: Request,
 	_res: Response,
 ): Promise<void> {
-	const logger = ContextLogger.getInstance(); // Assumes logger is attached to the request object
-
 	logger.info("Executing someFunction");
 
 	// Simulate some asynchronous operation
@@ -33,7 +34,6 @@ async function deepAwaitFunction() {
 			async function layer3() {
 				async function layer4() {
 					async function layer5() {
-						const logger = ContextLogger.getInstance();
 						const assignedAwaitFromLayer5 = randomInt(10000);
 						await new Promise((resolve) =>
 							setTimeout(resolve, assignedAwaitFromLayer5),
@@ -46,7 +46,6 @@ async function deepAwaitFunction() {
 				await layer4();
 			}
 			await layer3();
-			const logger = ContextLogger.getInstance();
 			const assignedFromAwaitLayer2 = randomInt(10000);
 			logger.upsertAsyncContext({ assignedFromAwaitLayer2 });
 			await new Promise((resolve) =>
@@ -61,7 +60,6 @@ async function deepAwaitFunction() {
 
 async function deepPromiseThenFunction() {
 	function layer5(): Promise<void> {
-		const logger = ContextLogger.getInstance();
 		const assignedFromPromiseThenLayer5 = randomInt(10000);
 		return new Promise((resolve) =>
 			setTimeout(resolve, assignedFromPromiseThenLayer5),
@@ -83,7 +81,6 @@ async function deepPromiseThenFunction() {
 	}
 
 	function layer2(): Promise<void> {
-		const logger = ContextLogger.getInstance();
 		const assignedFromPromiseThenLayer2 = randomInt(10000);
 		return layer3()
 			.then(() => {
@@ -104,7 +101,6 @@ async function deepPromiseThenFunction() {
 	try {
 		await layer1();
 	} catch (err) {
-		const logger = ContextLogger.getInstance();
 		logger.error("Caught error in deepPromiseThenFunction, re-throwing", {
 			error: err,
 		});
