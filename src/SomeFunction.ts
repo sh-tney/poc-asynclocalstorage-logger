@@ -1,5 +1,4 @@
 import { randomInt } from "node:crypto";
-import type { Request, Response } from "express";
 import logger from "./Logger";
 
 export default async function someFunction(timeoutScalar: number
