@@ -1,15 +1,15 @@
 import type { Express, Request, Response } from "express";
 import express from "express";
 import anotherMiddleware from "./middleware/anotherMiddleware";
-import errorCatcher from "./middleware/errorCatcher";
-import loggerAttacher from "./middleware/loggerAttacher";
+import errorCatcherMiddleware from "./middleware/errorCatcherMiddleware";
+import loggerMiddleware from "./middleware/loggerMiddleware";
 import someFunction from "./SomeFunction";
-import logger from "./utils/ContextLogger";
+import logger from "./Logger";
 
 const app: Express = express();
 let globalRequestCounter = 0;
 
-app.use(loggerAttacher);
+app.use(loggerMiddleware);
 app.use(anotherMiddleware);
 
 app.get("/", async (req: Request, res: Response) => {
@@ -20,10 +20,10 @@ app.get("/", async (req: Request, res: Response) => {
 
 	logger.info(`Received request number: ${globalRequestCounter}`);
 
-	return someFunction(req, res);
+	return someFunction(10000);
 });
 
-app.use(errorCatcher);
+app.use(errorCatcherMiddleware);
 
 app.listen(3000, () => {
 	console.log("Server is running on port 3000");

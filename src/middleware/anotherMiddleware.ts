@@ -1,6 +1,6 @@
 import { randomInt } from "node:crypto";
 import type { NextFunction, Request, Response } from "express";
-import logger from "../utils/ContextLogger";
+import logger from "../Logger";
 
 /**
  * Middleware to assign a random integer to the logger's async context.

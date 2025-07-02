@@ -10,10 +10,10 @@
 		"express": "^5.1.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.0.6",
 		"@types/express": "^5.0.3",
 		"@types/node": "^18.19.113",
-		"typescript": "^5.8.3"
+		"typescript": "^5.8.3",
+		"vitest": "^3.2.4"
 	},
 	"homepage": "https://github.com/sh-tney/poc-asynclocalstorage-logger#readme",
 	"license": "MIT",
@@ -23,6 +23,8 @@
 		"url": "git+https://github.com/sh-tney/poc-asynclocalstorage-logger.git"
 	},
 	"scripts": {
-		"start": "tsc && node ./dist/index.js"
+		"start": "tsc && node ./dist/index.js",
+		"test": "vitest run",
+		"test:watch": "vitest watch"
 	}
 }

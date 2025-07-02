@@ -1,15 +1,13 @@
 import { randomInt } from "node:crypto";
 import type { Request, Response } from "express";
-import logger from "./utils/ContextLogger";
+import logger from "./Logger";
 
-export default async function someFunction(
-	_req: Request,
-	_res: Response,
+export default async function someFunction(timeoutScalar: number
 ): Promise<void> {
 	logger.info("Executing someFunction");
 
 	// Simulate some asynchronous operation
-	const assignedAfterDelay = randomInt(10000); // Generate a random integer after the delay
+	const assignedAfterDelay = randomInt(timeoutScalar); // Generate a random integer after the delay
 	await new Promise((resolve) => setTimeout(resolve, assignedAfterDelay)); // Simulate async operation
 	logger.upsertAsyncContext({ assignedAfterDelay });
 	logger.debug("Assigned a random integer after delay.");
@@ -17,7 +15,7 @@ export default async function someFunction(
 	logger.debug(
 		"Starting deep parallel execution, which will throw an error in one of the branches.",
 	);
-	await Promise.all([deepAwaitFunction(), deepPromiseThenFunction()]).catch(
+	await Promise.all([deepAwaitFunction(timeoutScalar), deepPromiseThenFunction(timeoutScalar)]).catch(
 		(err) => {
 			logger.error("Caught error in someFunction, re-throwing", { error: err });
 			throw err; // Re-throw the error to be caught by the error catcher middleware
@@ -25,13 +23,13 @@ export default async function someFunction(
 	);
 }
 
-async function deepAwaitFunction() {
+async function deepAwaitFunction(timeoutScalar: number) {
 	async function layer1() {
 		async function layer2() {
 			async function layer3() {
 				async function layer4() {
 					async function layer5() {
-						const assignedAwaitFromLayer5 = randomInt(10000);
+						const assignedAwaitFromLayer5 = randomInt(timeoutScalar);
 						await new Promise((resolve) =>
 							setTimeout(resolve, assignedAwaitFromLayer5),
 						); // Simulate async operation
@@ -43,7 +41,7 @@ async function deepAwaitFunction() {
 				await layer4();
 			}
 			await layer3();
-			const assignedFromAwaitLayer2 = randomInt(10000);
+			const assignedFromAwaitLayer2 = randomInt(timeoutScalar);
 			logger.upsertAsyncContext({ assignedFromAwaitLayer2 });
 			await new Promise((resolve) =>
 				setTimeout(resolve, assignedFromAwaitLayer2),
@@ -55,9 +53,9 @@ async function deepAwaitFunction() {
 	await layer1();
 }
 
-async function deepPromiseThenFunction() {
+async function deepPromiseThenFunction(timeoutScalar: number) {
 	function layer5(): Promise<void> {
-		const assignedFromPromiseThenLayer5 = randomInt(10000);
+		const assignedFromPromiseThenLayer5 = randomInt(timeoutScalar);
 		return new Promise((resolve) =>
 			setTimeout(resolve, assignedFromPromiseThenLayer5),
 		).then(() => {
@@ -78,7 +76,7 @@ async function deepPromiseThenFunction() {
 	}
 
 	function layer2(): Promise<void> {
-		const assignedFromPromiseThenLayer2 = randomInt(10000);
+		const assignedFromPromiseThenLayer2 = randomInt(timeoutScalar);
 		return layer3()
 			.then(() => {
 				logger.upsertAsyncContext({ assignedFromPromiseThenLayer2 });

@@ -7,7 +7,10 @@ export type LogAttributes = {
 	traceId?: string;
 } & { [key: string]: unknown };
 
-const LOG_OUTPUTS = {	
+/**
+ * The log levels that can be used to filter logs, and the corresponding console methods.
+ */
+const LOG_OUTPUTS = {
 	DEBUG: console.debug,
 	INFO: console.info,
 	WARN: console.warn,
@@ -16,29 +19,31 @@ const LOG_OUTPUTS = {
 type LogLevel = keyof typeof LOG_OUTPUTS;
 
 /**
- * ContextLogger provides context-aware structured logging, supporting both global and async-local context.
+ * Logger provides context-aware structured logging, supporting both global and async-local context.
  */
-export class ContextLogger {
-	private static instance: ContextLogger;
+export class Logger {
+	private static instance: Logger;
 
-	private globalContext: LogAttributes = {};
-	private asyncContext: AsyncLocalStorage<LogAttributes> =
-		new AsyncLocalStorage();
+	private readonly globalContext: LogAttributes;
+	private readonly asyncContext: AsyncLocalStorage<LogAttributes>;
 
 	/**
 	 * Constructor is private to enforce singleton pattern.
 	 */
-	private constructor() {}
+	private constructor() {
+		this.globalContext = {};
+		this.asyncContext = new AsyncLocalStorage();
+	}
 
 	/**
-	 * Returns the singleton instance of ContextLogger, ensuring a shared global context.
-	 * @returns The singleton ContextLogger instance.
+	 * Returns the singleton instance of Logger, ensuring a shared global context.
+	 * @returns The singleton Logger instance.
 	 */
-	public static getInstance(): ContextLogger {
-		if (!ContextLogger.instance) {
-			ContextLogger.instance = new ContextLogger();
+	public static getInstance(): Logger {
+		if (!Logger.instance) {
+			Logger.instance = new Logger();
 		}
-		return ContextLogger.instance;
+		return Logger.instance;
 	}
 
 	/**
@@ -148,5 +153,5 @@ export class ContextLogger {
 	}
 }
 
-const logger = ContextLogger.getInstance();
+const logger = Logger.getInstance();
 export default logger;

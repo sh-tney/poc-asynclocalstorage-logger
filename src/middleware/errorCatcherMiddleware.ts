@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import logger from "../utils/ContextLogger";
+import logger from "../Logger";
 
 /**
  * Error catcher middleware for handling uncaught errors in Express.
@@ -9,7 +9,7 @@ import logger from "../utils/ContextLogger";
  * @param {Response} res - The Express response object used to send the error response.
  * @param {NextFunction} _next - The next middleware function (not used).
  */
-export default function errorCatcher(
+export default function errorCatcherMiddleware(
 	err: Error,
 	_req: Request,
 	res: Response,
