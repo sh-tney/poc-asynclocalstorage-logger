@@ -87,14 +87,14 @@ export class Logger {
 	 * @param context - The context properties to add or update for the current async scope.
 	 */
 	public upsertAsyncContext(context: LogAttributes): void {
-		let store = this.asyncContext.getStore();
+		const store = this.asyncContext.getStore();
 		if (!store) {
 			this.warn(
 				'This logger is not attached to an asyncContext; make sure you run your function within "runWithAsyncContext(fn, {})".',
 			);
 			return;
 		}
-		for(const key in context) store[key] = context[key];
+		for (const key in context) store[key] = context[key];
 	}
 
 	// ** STANDARD LOGGING FUNCTIONS **
