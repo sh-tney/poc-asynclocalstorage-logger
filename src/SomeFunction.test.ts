@@ -8,6 +8,7 @@ vi.mock('./Logger', () => ({
     debug: vi.fn(),
     error: vi.fn(),
     upsertAsyncContext: vi.fn(),
+    upsertGlobalContext: vi.fn(),
   }
 }));
 

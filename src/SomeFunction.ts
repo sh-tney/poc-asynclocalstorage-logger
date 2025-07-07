@@ -1,14 +1,14 @@
 import { randomInt } from "node:crypto";
 import logger from "./Logger";
 
-export default async function someFunction(timeoutScalar: number
-): Promise<void> {
+export default async function someFunction(timeoutScalar: number): Promise<void> {
 	logger.info("Executing someFunction");
 
 	// Simulate some asynchronous operation
 	const assignedAfterDelay = randomInt(timeoutScalar); // Generate a random integer after the delay
 	await new Promise((resolve) => setTimeout(resolve, assignedAfterDelay)); // Simulate async operation
-	logger.upsertAsyncContext({ assignedAfterDelay });
+	logger.upsertGlobalContext({ globalAssignedToBeOverwritten: assignedAfterDelay });
+	logger.upsertAsyncContext({ assignedAfterDelay, assignedToBeOverwritten: assignedAfterDelay });
 	logger.debug("Assigned a random integer after delay.");
 
 	logger.debug(
@@ -32,7 +32,8 @@ async function deepAwaitFunction(timeoutScalar: number) {
 						await new Promise((resolve) =>
 							setTimeout(resolve, assignedAwaitFromLayer5),
 						); // Simulate async operation
-						logger.upsertAsyncContext({ assignedAwaitFromLayer5 });
+						logger.upsertGlobalContext({ globalAssignedToBeOverwritten: assignedAwaitFromLayer5 });
+						logger.upsertAsyncContext({ assignedAwaitFromLayer5, assignedToBeOverwritten: assignedAwaitFromLayer5 });
 						logger.info("Logging from 5 await layers deep!");
 					}
 					await layer5();
@@ -58,8 +59,10 @@ async function deepPromiseThenFunction(timeoutScalar: number) {
 		return new Promise((resolve) =>
 			setTimeout(resolve, assignedFromPromiseThenLayer5),
 		).then(() => {
+			logger.upsertGlobalContext({ globalAssignedToBeOverwritten: assignedFromPromiseThenLayer5 });
 			logger.upsertAsyncContext({
 				assignedFromPromiseThenLayer5,
+				assignedToBeOverwritten: assignedFromPromiseThenLayer5,
 			});
 			logger.info("Throwing error from 5 promise-then layers deep!");
 			throw new Error("Random error from promise-then layer 5!");

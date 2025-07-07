@@ -24,7 +24,7 @@ type LogLevel = keyof typeof LOG_OUTPUTS;
 export class Logger {
 	private static instance: Logger;
 
-	private readonly globalContext: LogAttributes;
+	private globalContext: LogAttributes;
 	private readonly asyncContext: AsyncLocalStorage<LogAttributes>;
 
 	/**
@@ -39,7 +39,7 @@ export class Logger {
 	 * Returns the singleton instance of Logger, ensuring a shared global context.
 	 * @returns The singleton Logger instance.
 	 */
-	public static getInstance(): Logger {
+	static getInstance(): Logger {
 		if (!Logger.instance) {
 			Logger.instance = new Logger();
 		}
@@ -50,7 +50,7 @@ export class Logger {
 	 * Runs a function within a new async logging context.
 	 * Provided attributes will be attached to all logs produced within this context.
 	 *
-	 * Attributes can be further added or updated with @function upsertContext
+	 * Attributes can be further added or updated with @function upsertAsyncContext
 	 * @param fn - The function to execute.
 	 * @param context - The attributes to associate with this async scope.
 	 * @returns The result of the function.
@@ -64,9 +64,10 @@ export class Logger {
 	 * @returns The current effective logging context.
 	 */
 	public get context(): LogAttributes {
+		const asyncStore = this.asyncContext.getStore();
 		return {
 			...this.globalContext,
-			...this.asyncContext.getStore(),
+			...(asyncStore || {}),
 		};
 	}
 
@@ -76,7 +77,7 @@ export class Logger {
 	 * @param context - The context properties to add or update globally.
 	 */
 	public upsertGlobalContext(context: LogAttributes): void {
-		for (const key in context) this.globalContext[key] = context[key];
+		this.globalContext = { ...this.globalContext, ...context };
 	}
 
 	/**
@@ -86,20 +87,20 @@ export class Logger {
 	 * @param context - The context properties to add or update for the current async scope.
 	 */
 	public upsertAsyncContext(context: LogAttributes): void {
-		const store = this.asyncContext.getStore();
+		let store = this.asyncContext.getStore();
 		if (!store) {
 			this.warn(
-				'This logger is not attached to an asyncContext; make sure you run your function with "runWithAsyncContext(fn, {})".',
+				'This logger is not attached to an asyncContext; make sure you run your function within "runWithAsyncContext(fn, {})".',
 			);
 			return;
 		}
-		for (const key in context) store[key] = context[key];
+		for(const key in context) store[key] = context[key];
 	}
 
 	// ** STANDARD LOGGING FUNCTIONS **
 
 	/**
-	 * Logs a stuctured debug-level message, including any attributes from the current context.
+	 * Logs a structured debug-level message, including any attributes from the current context.
 	 * @param message - The message to log.
 	 * @param attributes - Additional context to include for just this log entry.
 	 */
@@ -108,7 +109,7 @@ export class Logger {
 	}
 
 	/**
-	 * Logs a stuctured info-level message, including any attributes from the current context.
+	 * Logs a structured info-level message, including any attributes from the current context.
 	 * @param message - The message to log.
 	 * @param attributes - Additional context to include for just this log entry.
 	 */
@@ -117,7 +118,7 @@ export class Logger {
 	}
 
 	/**
-	 * Logs a stuctured warn-level message, including any attributes from the current context.
+	 * Logs a structured warn-level message, including any attributes from the current context.
 	 * @param message - The message to log.
 	 * @param attributes - Additional context to include for just this log entry.
 	 */
@@ -126,7 +127,7 @@ export class Logger {
 	}
 
 	/**
-	 * Logs a stuctured error-level message, including any attributes from the current context.
+	 * Logs a structured error-level message, including any attributes from the current context.
 	 * @param message - The message to log.
 	 * @param attributes - Additional context to include for just this log entry.
 	 */
@@ -153,5 +154,6 @@ export class Logger {
 	}
 }
 
+// Create and export the singleton instance
 const logger = Logger.getInstance();
 export default logger;
