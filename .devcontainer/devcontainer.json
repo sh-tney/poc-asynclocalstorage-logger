@@ -1,0 +1,16 @@
+{
+	"name": "dev-local",
+	"dockerComposeFile": "dev-local.docker-compose.yml",
+	"service": "dev-local",
+	"workspaceFolder": "/poc-asynclocalstorage-logger",
+	"forwardPorts": [
+		3000
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"biomejs.biome"
+			]
+		}
+	}
+}

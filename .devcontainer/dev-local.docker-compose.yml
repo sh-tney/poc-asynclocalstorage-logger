@@ -1,0 +1,10 @@
+services:
+  dev-local:
+    build:
+      context: ../
+      dockerfile: .devcontainer/dev-local.Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ../:/poc-asynclocalstorage-logger
+    ports:
+      - "3000:3000"
