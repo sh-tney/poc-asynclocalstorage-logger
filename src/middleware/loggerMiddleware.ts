@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { NextFunction, Request, Response } from "express";
-import logger, { type LogAttributes } from "../Logger";
+import logger from "../Logger";
 
 /**
  * Middleware to attach a logger to the request context.
@@ -15,11 +15,8 @@ export default function loggerMiddleware(
 	_res: Response,
 	next: NextFunction,
 ): void {
-	// Starting async context
-	const requestContext: LogAttributes = {
+	logger.runWithAsyncContext(next, {
 		traceId: randomUUID(),
 		entryPoint: `${req.method}: ${req.url}`,
-	};
-
-	logger.runWithAsyncContext(next, requestContext);
+	});
 }
